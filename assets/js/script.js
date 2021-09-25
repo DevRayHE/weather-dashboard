@@ -1,5 +1,7 @@
-var weatherData = {};
+var weatherData = {
+  currentTemp:"",
 
+};
 
 function handleSearchFormSubmit() {
   //event.preventDefault();
@@ -11,7 +13,6 @@ function handleSearchFormSubmit() {
     console.error("You need a search input value!");
     return;
   }
-
   searchApi(city)
 }
 
@@ -59,7 +60,7 @@ function fetchWeatherData(URL) {
       return response.json();
     })
     .then(function (searchRes) {
-      weatherData = searchRes;
+      weatherData.currentTemp = searchRes.current.temp;
       console.log(weatherData);
     })
     .catch(function (error) {
@@ -67,4 +68,13 @@ function fetchWeatherData(URL) {
     });
 }
 
-handleSearchFormSubmit()
+function displayDate() {
+  let dateToday = moment().format("D/M/YYYY");
+  let dateDisplayEl = document.getElementById("currentDay");
+  dateDisplayEl.textContent = dateToday;
+  console.log(dateToday);
+  // dateDisplayEl.text(dateToday);
+}
+
+// handleSearchFormSubmit()
+displayDate();
