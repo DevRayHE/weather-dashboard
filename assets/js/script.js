@@ -1,3 +1,4 @@
+var weatherData = {};
 
 
 function handleSearchFormSubmit() {
@@ -17,9 +18,16 @@ function handleSearchFormSubmit() {
 // serachFormEl.addEventListener("submit", handleSearchFormSubmit);
 function searchApi(city) {
   let APIKey = config.weatherAPIKey;
-  let queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + APIKey;
+  let locationQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" 
+    + city 
+    + "&units=metric&appid=" 
+    + APIKey;
 
-  fetch(queryURL)
+  fetchLatAndLon(locationQueryURL, APIKey);
+}
+
+function fetchLatAndLon(URL, APIKey) {
+  fetch(URL)
     .then(function (response) {
       if(!response.ok) {
         throw response.json();
@@ -27,7 +35,32 @@ function searchApi(city) {
       return response.json();
     })
     .then(function (searchRes) {
-      console.log(searchRes);
+      let oneCallQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" 
+    + searchRes.coord.lat 
+    + "&lon=" 
+    + searchRes.coord.lon
+    + "&exclude=minutely,hourly"
+    + "&units=metric&appid=" 
+    + APIKey;
+
+    fetchWeatherData(oneCallQueryURL);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+}
+
+function fetchWeatherData(URL) {
+  fetch(URL)
+    .then(function (response) {
+      if(!response.ok) {
+        throw response.json();
+      }
+      return response.json();
+    })
+    .then(function (searchRes) {
+      weatherData = searchRes;
+      console.log(weatherData);
     })
     .catch(function (error) {
       console.log(error);
