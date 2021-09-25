@@ -30,19 +30,33 @@
       <h4 id="currentDay"></h4>
     </header>
 
-    <section class="container">
+    <section class="container-fluid">
       <div class="row">
         <div class="col-xs-12 col-sm-3 bg-success p-1">
-          <div class="mb-3">
-            <h3><label for="searchInput" class="form-label">Search for a City:</label></h3>
-            <input type="text" class="form-control" id="city" placeholder="Your next destination">
-          </div>
-          <div class="d-grid">
-            <button type="submit" class="btn btn-primary">Search</button>
-          </div>
+          <form id="searchForm">
+            <div class="m-3">
+              <h3><label for="searchInput" class="form-label">Search for a City:</label></h3>
+              <input type="text" class="form-control" id="searchInput" placeholder="Your next destination">
+            </div>
+            <div class="d-grid">
+              <button type="submit" class="btn btn-primary m-3">Search</button>
+            </div>
+          </form>
         </div>
         <div class="col-xs-12 col-sm-9 bg-info">
-            <p>weather display</p>
+            <div class="contaner-fluid">
+              <div class="row" id="displayWeather">
+                <!-- <div class="col-12 bg-light">
+                  <div class="card text-left">
+                    <div class="card-header" id="currentCard">
+
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 bg-dark"><p> 5 cards</p></div> -->
+              </div>
+
+            </div>
         </div>
       </div>
     </section>
