@@ -14,63 +14,73 @@ function displayWeatherData(city, weatherData, index) {
   console.log(weatherData.daily[index].uvi);
   console.log(weatherData.daily[index].weather[0].icon);
 
-  let cardEl = document.createElement("div");
-  let cardHeaderEl = document.createElement("div");
-  let cardBody = document.createElement("div");
-  cardEl.classList.add('card', 'text-left', 'bg-dark', 'text-light')
-  document.querySelector('#displayWeather').append(cardEl);
-
-  cardHeaderEl.classList.add('card-header');
-  cardEl.append(cardHeaderEl);
-  cardHeaderEl.textContent= moment().add(index, 'd').format("D/M/YYYY");
-
-  cardBody.classList.add('card-body');
-  cardEl.append(cardBody);
-
-  let ulEl = document.createElement('ul');
-  cardBody.append(ulEl);
-
-  let liTempEl = document.createElement('li');
-  liTempEl.textContent = 'Temp: ' + weatherData.daily[index].temp.eve + "°C";
-  ulEl.appendChild(liTempEl);
   
-  let liWindEl = document.createElement('li');
-  liWindEl.textContent = 'Wind: ' + weatherData.daily[index].wind_speed + ' KmPH'; 
-  ulEl.appendChild(liWindEl);
+  let cardEl = document.createElement("div");
+  let ulEl = document.createElement('ul');
+  let iconImageEl = document.createElement('img');
 
-  let liHumidEl = document.createElement('li');
-  liHumidEl.textContent = 'Humidity: ' + weatherData.daily[index].humidity + ' %';
-  ulEl.appendChild(liHumidEl);
+  let date = moment().add(index, 'd').format("D/M/YYYY");
+  let temp = weatherData.daily[index].temp.eve + '°C';
+  let wind = weatherData.daily[index].wind_speed + ' KmPH';
+  let humidity = weatherData.daily[index].humidity + ' %';
+  let weatherIcon = weatherData.daily[index].weather[0].icon;
+  let UVI = weatherData.daily[index].uvi;
+
+  iconImageEl.setAttribute('src', 'http://openweathermap.org/img/wn/' 
+        + weatherIcon
+        + '@2x.png');
+
+  cardEl.classList.add('card', 'text-left', 'bg-dark', 'text-light');
+  ulEl.classList.add('list-group', 'list-group-flush');
+  cardEl.append(ulEl);
+
+
+  for (i=0; i <5; i++) {
+    ulEl.append(document.createElement('li'));
+  }
 
   if (index === 0) {
+    document.querySelector('#displayWeather').append(cardEl);
+    cardEl.setAttribute('id', 'day' + index);
 
-    // Main today card header displays city name and weather icon.
-    cardHeaderEl.textContent = city + moment().add(index, 'd').format("D/M/YYYY");
-    let iconImageEl = document.createElement('img');
-    cardHeaderEl.appendChild(iconImageEl);
+    let allLiEl = document.querySelectorAll('li');
+    console.log(allLiEl);
+    allLiEl[0].textContent = city + " " + date;
+    allLiEl[0].classList.add('h2');
+    allLiEl[0].appendChild(iconImageEl);
+    allLiEl[1].textContent = 'Temp: ' + temp;
+    allLiEl[2].textContent = 'Wind: ' + wind;
+    allLiEl[3].textContent = 'Humidity: ' + humidity;
+    allLiEl[4].textContent = 'UV Index: ' + UVI;
 
-    iconImageEl.setAttribute('src', 'http://openweathermap.org/img/wn/' 
-      + weatherData.daily[index].weather[0].icon
-      + '@2x.png');
+    let cardGroup = document.createElement('div');
+    document.querySelector('#' + 'day' + index).append(cardGroup);
+    cardGroup.classList.add('card-group');
 
-    let liUVIEl = document.createElement('li');
-    // ulEl.insertBefore(liUVIEl, ulEl.childNodes[0]);
-    liUVIEl.textContent = 'UV Index: ' + weatherData.daily[index].uvi;
-    // liUVIEl.after(liHumidEl);
-    liHumidEl.after(liUVIEl);
   }
   else {
-    let liIconEl = document.createElement('li');
-    let iconImageEl = document.createElement('img');
+    // cardEl.classList.add("col-3");
 
-    iconImageEl.setAttribute('src', 'http://openweathermap.org/img/wn/' 
-      + weatherData.daily[index].weather[0].icon
-      + '@2x.png');
+    document.querySelector('.card-group').append(cardEl);
+    cardEl.setAttribute('id', 'day' + index);
 
-    // liIconEl.textContent = weatherData.daily[i].weather[0].icon;
-    ulEl.insertBefore(liIconEl, ulEl.childNodes[0]);
-    liIconEl.appendChild(iconImageEl);
+    let allLiEl = document.querySelectorAll('#' + 'day' + index + ' li');
+    console.log(allLiEl);
+    allLiEl[0].textContent = city + " " + date;
+    allLiEl[0].classList.add('h2');
+    allLiEl[0].appendChild(iconImageEl);
+    allLiEl[1].textContent = 'Temp: ' + temp;
+    allLiEl[2].textContent = 'Wind: ' + wind;
+    allLiEl[3].textContent = 'Humidity: ' + humidity;
+    allLiEl[4].textContent = 'UV Index: ' + UVI;
+
   }
+
+  let allLiEl = document.querySelectorAll('li');
+  allLiEl.forEach(function(el) {
+    console.log(el);
+    el.classList.add('list-group-item');
+  })
 }
 
 // // To get tomorrow's date
