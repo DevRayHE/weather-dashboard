@@ -1,20 +1,26 @@
 // Display today's date
-var dateToday = moment().format("D/M/YYYY");
-var dateDisplayEl = document.getElementById("currentDay");
-dateDisplayEl.textContent = dateToday;
+var dateToday = moment().format('D/M/YYYY');
+// var dateDisplayEl = document.getElementById('currentDay');
+// dateDisplayEl.textContent = dateToday;
+var searchData = [];
 
 
 // To generate elements on HTML and display data
 function displayWeatherData(city, weatherData, index) {
-  console.log(weatherData);
-  console.log(moment().add(index, 'd').format("D/M/YYYY"));
-  console.log(weatherData.daily[index].temp.eve);
-  console.log(weatherData.daily[index].wind_speed);
-  console.log(weatherData.daily[index].humidity);
-  console.log(weatherData.daily[index].uvi);
-  console.log(weatherData.daily[index].weather[0].icon);
-
+  // console.log(weatherData);
+  // console.log(moment().add(index, 'd').format("D/M/YYYY"));
+  // console.log(weatherData.daily[index].temp.eve);
+  // console.log(weatherData.daily[index].wind_speed);
+  // console.log(weatherData.daily[index].humidity);
+  // console.log(weatherData.daily[index].uvi);
+  // console.log(weatherData.daily[index].weather[0].icon);
   
+  // Reset the page if weather data is present.
+  if (document.querySelector('#day5')) {
+    document.querySelector('#displayWeather').innerText = '';
+  }
+  
+  let cityName = city.charAt(0).toUpperCase() + city.slice(1);
   let cardEl = document.createElement("div");
   let ulEl = document.createElement('ul');
   let iconImageEl = document.createElement('img');
@@ -39,56 +45,74 @@ function displayWeatherData(city, weatherData, index) {
     ulEl.append(document.createElement('li'));
   }
 
+  // Display weather on main card for today
   if (index === 0) {
     document.querySelector('#displayWeather').append(cardEl);
     cardEl.setAttribute('id', 'day' + index);
+    cardEl.classList.add('border-1');
 
     let allLiEl = document.querySelectorAll('li');
-    console.log(allLiEl);
-    allLiEl[0].textContent = city + " " + date;
-    allLiEl[0].classList.add('h2');
+    allLiEl[0].textContent = cityName + " " + date;
+    allLiEl[0].classList.add('display-4', 'fw-bold');
     allLiEl[0].appendChild(iconImageEl);
     allLiEl[1].textContent = 'Temp: ' + temp;
     allLiEl[2].textContent = 'Wind: ' + wind;
     allLiEl[3].textContent = 'Humidity: ' + humidity;
     allLiEl[4].textContent = 'UV Index: ' + UVI;
 
+    let cardGroupHeader = document.createElement('span')
     let cardGroup = document.createElement('div');
+    document.querySelector('#' + 'day' + index).append(cardGroupHeader);
     document.querySelector('#' + 'day' + index).append(cardGroup);
+    cardGroupHeader.textContent = '5-Day Forecast: ';
+    cardGroupHeader.classList.add('h4','mt-3');
     cardGroup.classList.add('card-group');
-
   }
+  // Display weather on card group for next 5 days
   else {
-    // cardEl.classList.add("col-3");
-
     document.querySelector('.card-group').append(cardEl);
     cardEl.setAttribute('id', 'day' + index);
+    cardEl.classList.add('m-2');
 
     let allLiEl = document.querySelectorAll('#' + 'day' + index + ' li');
-    console.log(allLiEl);
-    allLiEl[0].textContent = city + " " + date;
-    allLiEl[0].classList.add('h2');
-    allLiEl[0].appendChild(iconImageEl);
-    allLiEl[1].textContent = 'Temp: ' + temp;
-    allLiEl[2].textContent = 'Wind: ' + wind;
-    allLiEl[3].textContent = 'Humidity: ' + humidity;
-    allLiEl[4].textContent = 'UV Index: ' + UVI;
-
+    // console.log(allLiEl);
+    allLiEl[0].textContent = date;
+    allLiEl[0].classList.add('fw-bold');
+    allLiEl[1].appendChild(iconImageEl);
+    allLiEl[2].textContent = 'Temp: ' + temp;
+    allLiEl[3].textContent = 'Wind: ' + wind;
+    allLiEl[4].textContent = 'Humidity: ' + humidity;
   }
 
   let allLiEl = document.querySelectorAll('li');
   allLiEl.forEach(function(el) {
-    console.log(el);
-    el.classList.add('list-group-item');
+    // console.log(el);
+    el.classList.add('list-group-item', 'border-0');
   })
 }
 
-// // To get tomorrow's date
-// var tomorrow = moment().add(1, 'd').format("D/M/YYYY");
-
 // let formEl = document.getElementById("searchForm");
 // Listen to form submit event
-document.getElementById("searchForm").addEventListener("submit", handleSearchFormSubmit);
+document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
+
+function displayHistory(data) {
+  //Create new card with list-group
+  let historyCard = document.createElement('div');
+  let historyCardUl = document.createElement('ul');
+  let searchCard = document.querySelector('#searchCard');
+
+  historyCard.classList.add('card');
+  historyCardUl.classList.add('list-group', 'list-group-flush'); 
+  historyCard.append(historyCardUl)
+  searchCard.append(historyCard);
+ 
+  for (i=0; i<data.length; i++) {
+    let liEL = document.createElement('li');
+    historyCardUl.append(liEL);
+    liEL.textContent = data[i];
+    console.log(data[i]);
+  }
+}
 
 function handleSearchFormSubmit(event) {
   event.preventDefault();
@@ -103,8 +127,23 @@ function handleSearchFormSubmit(event) {
     document.querySelector("#searchInput").setAttribute("placeholder", "Invalid input!");
     return;
   }
-  searchApi(city)
 
+  // Local storage has search history data, then get the data
+  if(localStorage.getItem('searchHistory')) {
+    searchData = localStorage.getItem('searchHistory').split(',');
+    if(!(searchData.includes(city))) {
+      searchData.push(city);
+      searchData.sort();
+      localStorage.setItem('searchHistory', searchData);
+    }
+  } // When local storage has no search data 
+  else {
+    searchData.push(city);
+    localStorage.setItem('searchHistory', searchData);
+  }
+
+  displayHistory(searchData);
+  searchApi(city)
   // var currentCard = document.querySelector("#currentCard");
   // currentCard.innerHTML = city + "(" + dateToday + ")";
 }
