@@ -7,13 +7,6 @@ var searchData = [];
 
 // To generate elements on HTML and display data
 function displayWeatherData(city, weatherData, index) {
-  // console.log(weatherData);
-  // console.log(moment().add(index, 'd').format("D/M/YYYY"));
-  // console.log(weatherData.daily[index].temp.eve);
-  // console.log(weatherData.daily[index].wind_speed);
-  // console.log(weatherData.daily[index].humidity);
-  // console.log(weatherData.daily[index].uvi);
-  // console.log(weatherData.daily[index].weather[0].icon);
   
   // Reset the page if weather data is present.
   if (document.querySelector('#day5')) {
@@ -94,12 +87,18 @@ function displayWeatherData(city, weatherData, index) {
 document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
 
 function displayHistory(data) {
+
+  if (document.querySelector('.historyCard')) {
+    let oldCard = document.querySelector('#searchCard .historyCard');
+    oldCard.remove();
+  }
+
   //Create new card with list-group
   let historyCard = document.createElement('div');
   let historyCardUl = document.createElement('ul');
   let searchCard = document.querySelector('#searchCard');
 
-  historyCard.classList.add('card');
+  historyCard.classList.add('card', 'historyCard');
   historyCardUl.classList.add('list-group', 'list-group-flush'); 
   historyCard.append(historyCardUl)
   searchCard.append(historyCard);
