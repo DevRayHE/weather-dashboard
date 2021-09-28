@@ -105,9 +105,12 @@ function displayHistory(data) {
  
   for (i=0; i<data.length; i++) {
     let liEL = document.createElement('li');
+    let btnEl = document.createElement('button');
     historyCardUl.append(liEL);
-    liEL.textContent = data[i];
-    console.log(data[i]);
+    liEL.append(btnEl);
+    liEL.classList.add('m-1', 'p1');
+    btnEl.classList.add('btn', 'btn-primary', 'm-1');
+    btnEl.textContent = data[i];
   }
 }
 
