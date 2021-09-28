@@ -86,6 +86,7 @@ function displayWeatherData(city, weatherData, index) {
 // Listen to form submit event
 document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
 
+
 function displayHistory(data) {
 
   if (document.querySelector('.historyCard')) {
@@ -109,9 +110,22 @@ function displayHistory(data) {
     historyCardUl.append(liEL);
     liEL.append(btnEl);
     liEL.classList.add('m-1', 'p1');
-    btnEl.classList.add('btn', 'btn-primary', 'm-1');
+    btnEl.classList.add('btn', 'btn-primary', 'm-1', 'historyBtn');
     btnEl.textContent = data[i];
   }
+
+  //Listen to click event on history item button
+  let searchBtnElAll = document.querySelectorAll('.historyBtn');
+  searchBtnElAll.forEach(function(searchBtnElEach) {
+    console.log(searchBtnElEach.textContent);
+    searchBtnElEach.addEventListener('click', btnSearchApi);
+  })
+
+  //Call the searchApi function with content of button(city name) as parameter
+  function btnSearchApi(event) {
+    searchApi(event.target.textContent);
+  }
+
 }
 
 function handleSearchFormSubmit(event) {
