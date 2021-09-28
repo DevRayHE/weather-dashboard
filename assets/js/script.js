@@ -51,7 +51,7 @@ function displayWeatherData(city, weatherData, index) {
     cardEl.setAttribute('id', 'day' + index);
     cardEl.classList.add('border-1');
 
-    let allLiEl = document.querySelectorAll('li');
+    let allLiEl = document.querySelectorAll('#displayWeather li');
     allLiEl[0].textContent = cityName + " " + date;
     allLiEl[0].classList.add('display-4', 'fw-bold');
     allLiEl[0].appendChild(iconImageEl);
@@ -75,7 +75,6 @@ function displayWeatherData(city, weatherData, index) {
     cardEl.classList.add('m-2');
 
     let allLiEl = document.querySelectorAll('#' + 'day' + index + ' li');
-    // console.log(allLiEl);
     allLiEl[0].textContent = date;
     allLiEl[0].classList.add('fw-bold');
     allLiEl[1].appendChild(iconImageEl);
@@ -86,7 +85,6 @@ function displayWeatherData(city, weatherData, index) {
 
   let allLiEl = document.querySelectorAll('li');
   allLiEl.forEach(function(el) {
-    // console.log(el);
     el.classList.add('list-group-item', 'border-0');
   })
 }
@@ -154,6 +152,8 @@ function searchApi(city) {
     + city 
     + "&units=metric&appid=" 
     + APIKey;
+
+    console.log(locationQueryURL);
 
   fetchLatAndLon(city, locationQueryURL, APIKey);
 }
