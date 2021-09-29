@@ -8,6 +8,8 @@ var searchData = [];
 // To generate elements on HTML and display data
 function displayWeatherData(city, weatherData, index) {
   
+  displayHistory(searchData);
+
   // Reset the page if weather data is present.
   if (document.querySelector('#day5')) {
     document.querySelector('#displayWeather').innerText = '';
@@ -142,21 +144,6 @@ function handleSearchFormSubmit(event) {
     return;
   }
 
-  // Local storage has search history data, then get the data
-  if(localStorage.getItem('searchHistory')) {
-    searchData = localStorage.getItem('searchHistory').split(',');
-    if(!(searchData.includes(city))) {
-      searchData.push(city);
-      searchData.sort();
-      localStorage.setItem('searchHistory', searchData);
-    }
-  } // When local storage has no search data 
-  else {
-    searchData.push(city);
-    localStorage.setItem('searchHistory', searchData);
-  }
-
-  displayHistory(searchData);
   searchApi(city)
   // var currentCard = document.querySelector("#currentCard");
   // currentCard.innerHTML = city + "(" + dateToday + ")";
@@ -194,6 +181,7 @@ function fetchLatAndLon(city, URL, APIKey) {
     fetchWeatherData(city, oneCallQueryURL);
     })
     .catch(function (error) {
+      document.querySelector('#displayWeather').innerText = 'Invalid search, try again!';
       console.log(error);
     });
 }
@@ -207,11 +195,28 @@ function fetchWeatherData(city, URL) {
       return response.json();
     })
     .then(function (searchRes) {
+      // Local storage has search history data, then get the data
+      if(localStorage.getItem('searchHistory')) {
+        searchData = localStorage.getItem('searchHistory').split(',');
+        if(!(searchData.includes(city))) {
+          searchData.push(city);
+          searchData.sort();
+          localStorage.setItem('searchHistory', searchData);
+        }
+      } // When local storage has no search data 
+      else {
+        searchData.push(city);
+        localStorage.setItem('searchHistory', searchData);
+      }
+
       for (index=0; index<6 ; index++) {
         displayWeatherData(city, searchRes, index);
       }
+
+      
     })
     .catch(function (error) {
+      document.querySelector('#displayWeather').innerText = 'Invalid search, try again!';
       console.log(error);
     });
 }
