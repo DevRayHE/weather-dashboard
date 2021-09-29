@@ -4,6 +4,9 @@ var dateToday = moment().format('D/M/YYYY');
 // dateDisplayEl.textContent = dateToday;
 var searchData = [];
 
+// Listen to form submit event
+document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
+
 
 // To generate elements on HTML and display data
 function displayWeatherData(city, weatherData, index) {
@@ -13,8 +16,14 @@ function displayWeatherData(city, weatherData, index) {
   // Reset the page if weather data is present.
   if (document.querySelector('#day5')) {
     document.querySelector('#displayWeather').innerText = '';
+  } else if (document.querySelector('#displayWeather #errMsg')) {
+    document.querySelector('#errMsg').remove();
   }
   
+  if (city = 'userGeolocation') {
+    city = '';
+  }
+
   let cityName = city.charAt(0).toUpperCase() + city.slice(1);
   let cardEl = document.createElement("div");
   let ulEl = document.createElement('ul');
@@ -84,11 +93,6 @@ function displayWeatherData(city, weatherData, index) {
   })
 }
 
-// let formEl = document.getElementById("searchForm");
-// Listen to form submit event
-document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
-
-
 function displayHistory(data) {
 
   if (document.querySelector('.historyCard')) {
@@ -144,6 +148,7 @@ function handleSearchFormSubmit(event) {
     return;
   }
 
+  document.querySelector("#searchInput").setAttribute("placeholder", "city name");
   searchApi(city)
   // var currentCard = document.querySelector("#currentCard");
   // currentCard.innerHTML = city + "(" + dateToday + ")";
@@ -181,7 +186,7 @@ function fetchLatAndLon(city, URL, APIKey) {
     fetchWeatherData(city, oneCallQueryURL);
     })
     .catch(function (error) {
-      document.querySelector('#displayWeather').innerText = 'Invalid search, try again!';
+      displayErrMsg('Invalid search, try again!');
       console.log(error);
     });
 }
@@ -212,20 +217,61 @@ function fetchWeatherData(city, URL) {
       for (index=0; index<6 ; index++) {
         displayWeatherData(city, searchRes, index);
       }
-
-      
     })
     .catch(function (error) {
-      document.querySelector('#displayWeather').innerText = 'Invalid search, try again!';
+      displayErrMsg('Invalid search, try again!');
       console.log(error);
     });
 }
 
-// function displayDate() {
-//   let dateToday = moment().format("D/M/YYYY");
-//   let dateDisplayEl = document.getElementById("currentDay");
-//   dateDisplayEl.textContent = dateToday;
-// }
+function displayErrMsg(error) {
+  document.querySelector('#displayWeather').innerHTML = '';
+  let errEl = document.createElement('div');
+  document.querySelector('#displayWeather').append(errEl);
+  // errEl.appendTo(document.querySelector('#displayWeather'));
+  errEl.textContent = error;
+  errEl.classList.add('display-6', 'mt-5', 'text-center');
+  errEl.setAttribute('id','errMsg')
+}
 
-// handleSearchFormSubmit();
-// displayDate();
+// Initial function, to get user geolocation to display weather at current location, included error handling.
+function init() {
+  if (navigator.geolocation) {
+    console.log(navigator.geolocation.getCurrentPosition(showPosition, showError));
+  }
+
+  function showPosition(position) {
+    let APIKey = config.weatherAPIKey;
+    let userLat = position.coords.latitude;
+    let userLon = position.coords.longitude;
+
+    let oneCallQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" 
+    + userLat
+    + "&lon=" 
+    + userLon
+    + "&exclude=minutely,hourly"
+    + "&units=metric&appid=" 
+    + APIKey;
+
+    fetchWeatherData('userGeolocation', oneCallQueryURL)
+  }
+
+  function showError(error) {
+    switch(error.code) {
+      case error.PERMISSION_DENIED:
+        displayErrMsg ('User denied the request for Geolocation.');
+        break;
+      case error.POSITION_UNAVAILABLE:
+        displayErrMsg ('Location information is unavailable.');
+        break;
+      case error.TIMEOUT:
+        displayErrMsg ('The request to get user location timed out.');
+        break;
+      case error.UNKNOWN_ERROR:
+        displayErrMsg ('An unknown error occurred.');
+        break;
+    }
+  }
+}
+
+init();
