@@ -62,7 +62,12 @@ function displayWeatherData(city, weatherData, index) {
     allLiEl[1].textContent = 'Temp: ' + temp;
     allLiEl[2].textContent = 'Wind: ' + wind;
     allLiEl[3].textContent = 'Humidity: ' + humidity;
-    allLiEl[4].textContent = 'UV Index: ' + UVI;
+
+    let iEl = document.createElement('i');
+    allLiEl[4].textContent = 'UV Index: ';
+    allLiEl[4].appendChild(iEl);
+    iEl.textContent = UVI;
+    UVIndexScale(UVI);
 
     let cardGroupHeader = document.createElement('span')
     let cardGroup = document.createElement('div');
@@ -91,6 +96,25 @@ function displayWeatherData(city, weatherData, index) {
   allLiEl.forEach(function(el) {
     el.classList.add('list-group-item', 'border-0');
   })
+}
+
+function UVIndexScale(UVI) {
+  let iEl = document.querySelector('i');
+  if (UVI <= 2) {
+    iEl.classList.add('bg-green', 'p-1');
+  }
+  else if (2 < UVI && UVI <= 5) {
+    iEl.classList.add('bg-yellow', 'p-1');
+  }
+  else if (5 < UVI && UVI < 8) {
+    iEl.classList.add('bg-orange', 'p-1');
+  }
+  else if (8 <= UVI && UVI < 11) {
+    iEl.classList.add('bg-red', 'p-1');
+  }
+  else {
+    iEl.classList.add('bg-purple', 'p-1');
+  }
 }
 
 function displayHistory(data) {

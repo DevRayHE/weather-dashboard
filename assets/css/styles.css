@@ -11,3 +11,23 @@ h6 {
   /* font-family: 'Merriweather', serif;
   font-weight: 700; */
 }
+
+.bg-green {
+  background-color: green;
+}
+
+.bg-yellow {
+  background-color: #ffef00;
+}
+
+.bg-orange {
+  background-color: orange;
+}
+
+.bg-red {
+  background-color: red;
+}
+
+.bg-purple {
+  background-color: blueviolet;
+}
