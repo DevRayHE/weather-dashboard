@@ -3,6 +3,7 @@ var dateToday = moment().format('D/M/YYYY');
 // var dateDisplayEl = document.getElementById('currentDay');
 // dateDisplayEl.textContent = dateToday;
 var searchData = [];
+var currentLocation = [];
 
 // Listen to form submit event
 document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
@@ -11,6 +12,7 @@ document.getElementById('searchForm').addEventListener('submit', handleSearchFor
 // To generate elements on HTML and display data
 function displayWeatherData(city, weatherData, index) {
   
+  console.log(searchData);
   displayHistory(searchData);
 
   // Reset the page if weather data is present.
@@ -20,11 +22,13 @@ function displayWeatherData(city, weatherData, index) {
     document.querySelector('#errMsg').remove();
   }
   
-  if (city = 'userGeolocation') {
-    city = '';
-  }
+  // if (city === undefined) {
+  //   city = '';
+  // }
 
+  // Convert first letter to uppercase 
   let cityName = city.charAt(0).toUpperCase() + city.slice(1);
+  console.log(cityName);
   let cardEl = document.createElement("div");
   let ulEl = document.createElement('ul');
   let iconImageEl = document.createElement('img');
@@ -98,6 +102,7 @@ function displayWeatherData(city, weatherData, index) {
   })
 }
 
+// Display UVI index based on scale
 function UVIndexScale(UVI) {
   let iEl = document.querySelector('i');
   if (UVI <= 2) {
@@ -117,6 +122,7 @@ function UVIndexScale(UVI) {
   }
 }
 
+// Display search history on left nav bar, under search form.
 function displayHistory(data) {
 
   if (document.querySelector('.historyCard')) {
@@ -147,24 +153,37 @@ function displayHistory(data) {
   //Listen to click event on history item button
   let searchBtnElAll = document.querySelectorAll('.historyBtn');
   searchBtnElAll.forEach(function(searchBtnElEach) {
-    console.log(searchBtnElEach.textContent);
-    searchBtnElEach.addEventListener('click', btnSearchApi);
+  searchBtnElEach.addEventListener('click', btnSearchApi);
   })
 
   //Call the searchApi function with content of button(city name) as parameter
   function btnSearchApi(event) {
-    searchApi(event.target.textContent);
-  }
+    if (event.target.textContent === 'Current Location') {
+      let APIKey = config.weatherAPIKey;
 
+      let oneCallQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" 
+      + currentLocation[0]
+      + "&lon=" 
+      + currentLocation[1]
+      + "&exclude=minutely,hourly"
+      + "&units=metric&appid=" 
+      + APIKey;
+
+      fetchWeatherData('Current Location', oneCallQueryURL)
+    }
+    else {
+      searchApi(event.target.textContent);
+    }
+  }
 }
 
+// Handle search form submit event
 function handleSearchFormSubmit(event) {
   event.preventDefault();
 
   // Capture valid user input
   let searchInputVal = document.querySelector("#searchInput").value.toLowerCase();
   let city = searchInputVal;
-  console.log(city);
 
   // Display error message in place holder
   if (!searchInputVal) {
@@ -185,11 +204,10 @@ function searchApi(city) {
     + "&units=metric&appid=" 
     + APIKey;
 
-    console.log(locationQueryURL);
-
   fetchLatAndLon(city, locationQueryURL, APIKey);
 }
 
+// Fetch latitude and lontitude for fetching multiple days weather data
 function fetchLatAndLon(city, URL, APIKey) {
   fetch(URL)
     .then(function (response) {
@@ -211,10 +229,10 @@ function fetchLatAndLon(city, URL, APIKey) {
     })
     .catch(function (error) {
       displayErrMsg('Invalid search, try again!');
-      console.log(error);
     });
 }
 
+// Fetch multiple days weather data
 function fetchWeatherData(city, URL) {
   fetch(URL)
     .then(function (response) {
@@ -234,7 +252,7 @@ function fetchWeatherData(city, URL) {
           localStorage.setItem('searchHistory', searchData);
         }
       } // When local storage has no search data 
-      else if (city !== undefined){
+      else {
         searchData.push(city);
         localStorage.setItem('searchHistory', searchData);
       }
@@ -245,10 +263,10 @@ function fetchWeatherData(city, URL) {
     })
     .catch(function (error) {
       displayErrMsg('Invalid search, try again!');
-      console.log(error);
     });
 }
 
+// Display error message on invalid input or geolocation error
 function displayErrMsg(error) {
   document.querySelector('#displayWeather').innerHTML = '';
   let errEl = document.createElement('div');
@@ -262,23 +280,23 @@ function displayErrMsg(error) {
 // Initial function, to get user geolocation to display weather at current location, included error handling.
 function init() {
   if (navigator.geolocation) {
-    console.log(navigator.geolocation.getCurrentPosition(showPosition, showError));
+    navigator.geolocation.getCurrentPosition(showPosition, showError);
   }
 
   function showPosition(position) {
     let APIKey = config.weatherAPIKey;
-    let userLat = position.coords.latitude;
-    let userLon = position.coords.longitude;
+    currentLocation[0] = position.coords.latitude;
+    currentLocation[1] = position.coords.longitude;
 
     let oneCallQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" 
-    + userLat
+    + currentLocation[0]
     + "&lon=" 
-    + userLon
+    + currentLocation[1]
     + "&exclude=minutely,hourly"
     + "&units=metric&appid=" 
     + APIKey;
 
-    fetchWeatherData(undefined, oneCallQueryURL)
+    fetchWeatherData('Current Location', oneCallQueryURL)
   }
 
   //Geolocation error handling
