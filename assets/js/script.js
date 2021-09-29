@@ -224,6 +224,7 @@ function fetchWeatherData(city, URL) {
       return response.json();
     })
     .then(function (searchRes) {
+      // Check storage status before getitem, avoid error
       // Local storage has search history data, then get the data
       if(localStorage.getItem('searchHistory')) {
         searchData = localStorage.getItem('searchHistory').split(',');
@@ -233,7 +234,7 @@ function fetchWeatherData(city, URL) {
           localStorage.setItem('searchHistory', searchData);
         }
       } // When local storage has no search data 
-      else {
+      else if (city !== undefined){
         searchData.push(city);
         localStorage.setItem('searchHistory', searchData);
       }
@@ -254,7 +255,7 @@ function displayErrMsg(error) {
   document.querySelector('#displayWeather').append(errEl);
   // errEl.appendTo(document.querySelector('#displayWeather'));
   errEl.textContent = error;
-  errEl.classList.add('display-6', 'mt-5', 'text-center');
+  errEl.classList.add('display-7', 'mt-5', 'text-center');
   errEl.setAttribute('id','errMsg')
 }
 
@@ -277,9 +278,10 @@ function init() {
     + "&units=metric&appid=" 
     + APIKey;
 
-    fetchWeatherData('userGeolocation', oneCallQueryURL)
+    fetchWeatherData(undefined, oneCallQueryURL)
   }
 
+  //Geolocation error handling
   function showError(error) {
     switch(error.code) {
       case error.PERMISSION_DENIED:
