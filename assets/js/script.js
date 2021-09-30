@@ -149,7 +149,9 @@ function displayHistory(data) {
     liEL.append(btnEl);
     liEL.classList.add( 'p1', 'd-grid');
     btnEl.classList.add('btn', 'btn-secondary', 'm-1', 'historyBtn');
-    btnEl.textContent = data[i];
+    // Convert first leter to uppercase
+    let cityName = data[i].charAt(0).toUpperCase() + data[i].slice(1);
+    btnEl.textContent = cityName;
   }
 
   //Listen to click event on history item button
@@ -183,8 +185,10 @@ function displayHistory(data) {
 function handleSearchFormSubmit(event) {
   event.preventDefault();
 
-  // Capture valid user input
+  // Convert input to all lower case
   let searchInputVal = document.querySelector("#searchInput").value.toLowerCase();
+  // Convert first letter to upper case
+  searchInputVal = searchInputVal.charAt(0).toUpperCase() + searchInputVal.slice(1);
   let city = searchInputVal;
 
   // Display error message in place holder
