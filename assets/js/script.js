@@ -8,7 +8,6 @@ var currentLocation = [];
 // Listen to form submit event
 document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
 
-
 // To generate elements on HTML and display data
 function displayWeatherData(city, weatherData, index) {
   
@@ -28,7 +27,8 @@ function displayWeatherData(city, weatherData, index) {
 
   // Convert first letter to uppercase 
   let cityName = city.charAt(0).toUpperCase() + city.slice(1);
-  console.log(cityName);
+  let displayWeatherEl = document.querySelector('#displayWeather');
+  displayWeatherEl.classList.add('border-top');
   let cardEl = document.createElement("div");
   let ulEl = document.createElement('ul');
   let iconImageEl = document.createElement('img');
@@ -44,8 +44,8 @@ function displayWeatherData(city, weatherData, index) {
         + weatherIcon
         + '@2x.png');
 
-  cardEl.classList.add('card', 'text-left', 'bg-dark', 'text-light');
-  ulEl.classList.add('list-group', 'list-group-flush');
+  cardEl.classList.add('card', 'text-left');
+  ulEl.classList.add('bg-info','list-group', 'list-group-flush');
   cardEl.append(ulEl);
 
 
@@ -57,11 +57,12 @@ function displayWeatherData(city, weatherData, index) {
   if (index === 0) {
     document.querySelector('#displayWeather').append(cardEl);
     cardEl.setAttribute('id', 'day' + index);
-    cardEl.classList.add('border-1');
+    ulEl.classList.add('border');
+    // cardEl.classList.add('border-1');
 
     let allLiEl = document.querySelectorAll('#displayWeather li');
     allLiEl[0].textContent = cityName + " " + date;
-    allLiEl[0].classList.add('display-4', 'fw-bold');
+    allLiEl[0].classList.add('display-6', 'fw-bold');
     allLiEl[0].appendChild(iconImageEl);
     allLiEl[1].textContent = 'Temp: ' + temp;
     allLiEl[2].textContent = 'Wind: ' + wind;
@@ -79,13 +80,14 @@ function displayWeatherData(city, weatherData, index) {
     document.querySelector('#' + 'day' + index).append(cardGroup);
     cardGroupHeader.textContent = '5-Day Forecast: ';
     cardGroupHeader.classList.add('h4','mt-3');
-    cardGroup.classList.add('card-group');
+    cardGroup.classList.add('card-group', 'bg-info');
   }
   // Display weather on card group for next 5 days
   else {
     document.querySelector('.card-group').append(cardEl);
     cardEl.setAttribute('id', 'day' + index);
     cardEl.classList.add('m-2');
+    // ulEl.classList.add('bg-info');
 
     let allLiEl = document.querySelectorAll('#' + 'day' + index + ' li');
     allLiEl[0].textContent = date;
@@ -135,7 +137,7 @@ function displayHistory(data) {
   let historyCardUl = document.createElement('ul');
   let searchCard = document.querySelector('#searchCard');
 
-  historyCard.classList.add('card', 'historyCard');
+  historyCard.classList.add('card', 'historyCard', 'border-top', 'border-secdonary');
   historyCardUl.classList.add('list-group', 'list-group-flush'); 
   historyCard.append(historyCardUl)
   searchCard.append(historyCard);
@@ -145,8 +147,8 @@ function displayHistory(data) {
     let btnEl = document.createElement('button');
     historyCardUl.append(liEL);
     liEL.append(btnEl);
-    liEL.classList.add('m-1', 'p1');
-    btnEl.classList.add('btn', 'btn-primary', 'm-1', 'historyBtn');
+    liEL.classList.add( 'p1', 'd-grid');
+    btnEl.classList.add('btn', 'btn-secondary', 'm-1', 'historyBtn');
     btnEl.textContent = data[i];
   }
 
@@ -193,8 +195,7 @@ function handleSearchFormSubmit(event) {
 
   document.querySelector("#searchInput").setAttribute("placeholder", "city name");
   searchApi(city)
-  // var currentCard = document.querySelector("#currentCard");
-  // currentCard.innerHTML = city + "(" + dateToday + ")";
+  this.reset();
 }
 
 function searchApi(city) {
