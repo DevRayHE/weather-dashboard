@@ -2,6 +2,8 @@
 var searchData = [];
 var currentLocation = [];
 var apiKey = '1f9d3014d1a028a24c084adbdcec9008';
+var proDiv = document.querySelector('#progressDiv');
+var proBar = document.querySelector('#progressBar')
 
 // Listen to form submit event
 document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
@@ -38,6 +40,8 @@ function displayWeatherData(city, weatherData, index) {
   ulEl.classList.add('list-group', 'list-group-flush', 'rounded');
   cardEl.append(ulEl);
 
+  // Progress bar 100%
+  proBar.style = 'width:100%';
 
   for (i=0; i <5; i++) {
     ulEl.append(document.createElement('li'));
@@ -88,8 +92,11 @@ function displayWeatherData(city, weatherData, index) {
 
   let allLiEl = document.querySelectorAll('li');
   allLiEl.forEach(function(el) {
-    el.classList.add('list-group-item', 'border-0');
+    el.classList.add('list-group-item', 'border-0', 'shadow', 'bg-transparent');
   })
+  // Hides progress bar div
+  proDiv.classList.remove('visible');
+  proDiv.classList.add('invisible');
 }
 
 // Display UVI index based on scale
@@ -148,6 +155,10 @@ function displayHistory(data) {
 
   //Call the searchApi function with content of button(city name) as parameter
   function btnSearchApi(event) {
+    // Show progress bar
+    proDiv.classList.remove('invisible');
+    proDiv.classList.add('visible');
+    proBar.style = 'width:25%';
     if (event.target.textContent === 'Current Location') {
 
       let oneCallQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" 
@@ -170,6 +181,11 @@ function displayHistory(data) {
 function handleSearchFormSubmit(event) {
   event.preventDefault();
 
+  // Show progress bar with 25%
+  proDiv.classList.remove('invisible');
+  proDiv.classList.add('visible');
+  proBar.style = 'width:25%';
+
   // Convert input to all lower case
   let searchInputVal = document.querySelector("#searchInput").value.toLowerCase();
   // Convert first letter to upper case
@@ -179,6 +195,9 @@ function handleSearchFormSubmit(event) {
   // Display error message in place holder
   if (!searchInputVal) {
     document.querySelector("#searchInput").setAttribute("placeholder", "Invalid input!");
+    // Hide progress bar
+    proDiv.classList.remove('visible');
+    proDiv.classList.add('invisible');
     return;
   }
 
@@ -198,6 +217,8 @@ function searchApi(city) {
 
 // Fetch latitude and lontitude for fetching multiple days weather data
 function fetchLatAndLon(city, URL) {
+  // Progress bar 50%
+  proBar.style = 'width:50%';
   fetch(URL)
     .then(function (response) {
       if(!response.ok) {
@@ -223,6 +244,8 @@ function fetchLatAndLon(city, URL) {
 
 // Fetch multiple days weather data
 function fetchWeatherData(city, URL) {
+  // Progress bar 75%
+  proBar.style = 'width:75%';
   fetch(URL)
     .then(function (response) {
       if(!response.ok) {
@@ -257,12 +280,16 @@ function fetchWeatherData(city, URL) {
 
 // Display error message on invalid input or geolocation error
 function displayErrMsg(error) {
+  // Hide progress bar
+  proDiv.classList.remove('visible');
+  proDiv.classList.add('invisible');
+
   document.querySelector('#displayWeather').innerHTML = '';
   let errEl = document.createElement('div');
   document.querySelector('#displayWeather').append(errEl);
   // errEl.appendTo(document.querySelector('#displayWeather'));
   errEl.textContent = error;
-  errEl.classList.add('display-6', 'mt-5', 'text-center');
+  errEl.classList.add('fs-3', 'mt-5', 'text-center');
   errEl.setAttribute('id','errMsg')
 }
 

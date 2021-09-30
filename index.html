@@ -30,12 +30,14 @@
 
   <body class="linear-gradient-background-body">
     <header class="jumbotron text-center text-white p-1">
-      <h1 class="display-5 fw-bold">Weather Dashboard</h1>
-      <h4 id="currentDay"></h4>
+      <h1 class="display-5 fw-bold" id ="title">Weather Dashboard</h1>
+      <div class="progress invisible" id="progressDiv">
+        <div class="progress-bar progress-bar-striped" id="progressBar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+      </div>
     </header>
 
     <section class="container-fluid">
-      <div class="row bg-transparent">
+      <div class="row">
         <div class="col-xs-12 col-sm-3 p-1" id="searchCard">
           <form id="searchForm">
             <div class="m-3">
