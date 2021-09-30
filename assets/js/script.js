@@ -11,7 +11,6 @@ document.getElementById('searchForm').addEventListener('submit', handleSearchFor
 // To generate elements on HTML and display data
 function displayWeatherData(city, weatherData, index) {
   
-  console.log(searchData);
   displayHistory(searchData);
 
   // Reset the page if weather data is present.
