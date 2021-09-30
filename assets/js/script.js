@@ -1,6 +1,7 @@
 // Generate today's date
 var searchData = [];
 var currentLocation = [];
+var apiKey = '1f9d3014d1a028a24c084adbdcec9008';
 
 // Listen to form submit event
 document.getElementById('searchForm').addEventListener('submit', handleSearchFormSubmit);
@@ -151,7 +152,6 @@ function displayHistory(data) {
   //Call the searchApi function with content of button(city name) as parameter
   function btnSearchApi(event) {
     if (event.target.textContent === 'Current Location') {
-      let APIKey = config.weatherAPIKey;
 
       let oneCallQueryURL = "https://api.openweathermap.org/data/2.5/onecall?lat=" 
       + currentLocation[0]
@@ -159,7 +159,7 @@ function displayHistory(data) {
       + currentLocation[1]
       + "&exclude=minutely,hourly"
       + "&units=metric&appid=" 
-      + APIKey;
+      + apiKey;
 
       fetchWeatherData('Current Location', oneCallQueryURL)
     }
@@ -191,17 +191,16 @@ function handleSearchFormSubmit(event) {
 }
 
 function searchApi(city) {
-  let APIKey = config.weatherAPIKey;
   let locationQueryURL = "https://api.openweathermap.org/data/2.5/weather?q=" 
     + city 
     + "&units=metric&appid=" 
-    + APIKey;
+    + apiKey;
 
-  fetchLatAndLon(city, locationQueryURL, APIKey);
+  fetchLatAndLon(city, locationQueryURL);
 }
 
 // Fetch latitude and lontitude for fetching multiple days weather data
-function fetchLatAndLon(city, URL, APIKey) {
+function fetchLatAndLon(city, URL) {
   fetch(URL)
     .then(function (response) {
       if(!response.ok) {
@@ -216,7 +215,7 @@ function fetchLatAndLon(city, URL, APIKey) {
     + searchRes.coord.lon
     + "&exclude=minutely,hourly"
     + "&units=metric&appid=" 
-    + APIKey;
+    + apiKey;
 
     fetchWeatherData(city, oneCallQueryURL);
     })
@@ -277,7 +276,6 @@ function init() {
   }
 
   function showPosition(position) {
-    let APIKey = config.weatherAPIKey;
     currentLocation[0] = position.coords.latitude;
     currentLocation[1] = position.coords.longitude;
 
@@ -287,7 +285,7 @@ function init() {
     + currentLocation[1]
     + "&exclude=minutely,hourly"
     + "&units=metric&appid=" 
-    + APIKey;
+    + apiKey;
 
     fetchWeatherData('Current Location', oneCallQueryURL)
   }
