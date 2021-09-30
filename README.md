@@ -6,7 +6,7 @@
 
 # 📓 Description
 
-### Weather Dashboard site that displays live weather data, by fetching data from weather data server.
+### Weather Dashboard site that displays live realworld weather data with 5 days forecast
 
 <br/>
 
@@ -42,7 +42,7 @@
 
 ### Sample website intro video.
 
-![Sample gif video.](./assets/images/work-day-scheduler.gif "video")
+![Sample gif video.](./assets/images/weather-dashboard.gif "video")
 
 <br/>
 
