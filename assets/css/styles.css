@@ -1,5 +1,6 @@
 body {
-  /* font-family: 'Fira Sans', sans-serif; */
+  font-size: 16px;
+  font-family: 'Merriweather', serif;
 }
 
 h1,
@@ -8,8 +9,8 @@ h3,
 h4,
 h5,
 h6 {
-  /* font-family: 'Merriweather', serif;
-  font-weight: 700; */
+  font-family: 'Merriweather', serif;
+  font-weight: 700; 
 }
 
 .bg-green {
@@ -30,4 +31,20 @@ h6 {
 
 .bg-purple {
   background-color: blueviolet;
+}
+
+.linear-gradient-background-body {
+  background-image: linear-gradient(
+    #c57110 0%,
+    #0970ff 100%
+  );
+  background-attachment: fixed;
+}
+
+.card,
+.list-group,
+.card-group,
+ul,
+li {
+  background-color: transparent;
 }

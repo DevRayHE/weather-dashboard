@@ -18,9 +18,7 @@ function displayWeatherData(city, weatherData, index) {
   } else if (document.querySelector('#displayWeather #errMsg')) {
     document.querySelector('#errMsg').remove();
   }
-  
-  let displayWeatherEl = document.querySelector('#displayWeather');
-  displayWeatherEl.classList.add('border-top');
+
   let cardEl = document.createElement("div");
   let ulEl = document.createElement('ul');
   let iconImageEl = document.createElement('img');
@@ -37,7 +35,7 @@ function displayWeatherData(city, weatherData, index) {
         + '@2x.png');
 
   cardEl.classList.add('card', 'text-left');
-  ulEl.classList.add('bg-info','list-group', 'list-group-flush');
+  ulEl.classList.add('list-group', 'list-group-flush', 'rounded');
   cardEl.append(ulEl);
 
 
@@ -49,7 +47,6 @@ function displayWeatherData(city, weatherData, index) {
   if (index === 0) {
     document.querySelector('#displayWeather').append(cardEl);
     cardEl.setAttribute('id', 'day' + index);
-    ulEl.classList.add('border');
 
     let allLiEl = document.querySelectorAll('#displayWeather li');
     allLiEl[0].textContent = city + " " + date;
@@ -70,8 +67,8 @@ function displayWeatherData(city, weatherData, index) {
     document.querySelector('#' + 'day' + index).append(cardGroupHeader);
     document.querySelector('#' + 'day' + index).append(cardGroup);
     cardGroupHeader.textContent = '5-Day Forecast: ';
-    cardGroupHeader.classList.add('h4','mt-3');
-    cardGroup.classList.add('card-group', 'bg-info');
+    cardGroupHeader.classList.add('h4','mt-3', 'fw-bold');
+    cardGroup.classList.add('card-group');
   }
   // Display weather on card group for next 5 days
   else {
@@ -82,7 +79,7 @@ function displayWeatherData(city, weatherData, index) {
 
     let allLiEl = document.querySelectorAll('#' + 'day' + index + ' li');
     allLiEl[0].textContent = date;
-    allLiEl[0].classList.add('fw-bold');
+    allLiEl[0].classList.add('fw-bold', 'fs-5');
     allLiEl[1].appendChild(iconImageEl);
     allLiEl[2].textContent = 'Temp: ' + temp;
     allLiEl[3].textContent = 'Wind: ' + wind;
@@ -128,8 +125,8 @@ function displayHistory(data) {
   let historyCardUl = document.createElement('ul');
   let searchCard = document.querySelector('#searchCard');
 
-  historyCard.classList.add('card', 'historyCard', 'border-top', 'border-secdonary');
-  historyCardUl.classList.add('list-group', 'list-group-flush'); 
+  historyCard.classList.add('card', 'historyCard');
+  historyCardUl.classList.add('list-group', 'list-group-flush', 'bg-transparent'); 
   historyCard.append(historyCardUl)
   searchCard.append(historyCard);
  
@@ -265,7 +262,7 @@ function displayErrMsg(error) {
   document.querySelector('#displayWeather').append(errEl);
   // errEl.appendTo(document.querySelector('#displayWeather'));
   errEl.textContent = error;
-  errEl.classList.add('display-7', 'mt-5', 'text-center');
+  errEl.classList.add('display-6', 'mt-5', 'text-center');
   errEl.setAttribute('id','errMsg')
 }
 
