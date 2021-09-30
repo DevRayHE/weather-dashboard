@@ -1,7 +1,4 @@
-// Display today's date
-var dateToday = moment().format('D/M/YYYY');
-// var dateDisplayEl = document.getElementById('currentDay');
-// dateDisplayEl.textContent = dateToday;
+// Generate today's date
 var searchData = [];
 var currentLocation = [];
 
@@ -21,12 +18,6 @@ function displayWeatherData(city, weatherData, index) {
     document.querySelector('#errMsg').remove();
   }
   
-  // if (city === undefined) {
-  //   city = '';
-  // }
-
-  // Convert first letter to uppercase 
-  let cityName = city.charAt(0).toUpperCase() + city.slice(1);
   let displayWeatherEl = document.querySelector('#displayWeather');
   displayWeatherEl.classList.add('border-top');
   let cardEl = document.createElement("div");
@@ -58,10 +49,9 @@ function displayWeatherData(city, weatherData, index) {
     document.querySelector('#displayWeather').append(cardEl);
     cardEl.setAttribute('id', 'day' + index);
     ulEl.classList.add('border');
-    // cardEl.classList.add('border-1');
 
     let allLiEl = document.querySelectorAll('#displayWeather li');
-    allLiEl[0].textContent = cityName + " " + date;
+    allLiEl[0].textContent = city + " " + date;
     allLiEl[0].classList.add('display-6', 'fw-bold');
     allLiEl[0].appendChild(iconImageEl);
     allLiEl[1].textContent = 'Temp: ' + temp;
@@ -149,9 +139,7 @@ function displayHistory(data) {
     liEL.append(btnEl);
     liEL.classList.add( 'p1', 'd-grid');
     btnEl.classList.add('btn', 'btn-secondary', 'm-1', 'historyBtn');
-    // Convert first leter to uppercase
-    let cityName = data[i].charAt(0).toUpperCase() + data[i].slice(1);
-    btnEl.textContent = cityName;
+    btnEl.textContent = data[i];
   }
 
   //Listen to click event on history item button
